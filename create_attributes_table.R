@@ -84,6 +84,8 @@ create_attributes_table <- function(data, definitions = NULL, missingValueCode =
       table$numberType[i] = NA
     }
     
+    message("If any nonimal or ordinal variables are 'enumeratedDomain', these were incorrectly set to 'textDomain'. Please update these fields by hand.")
+    
   }
   
   return(table)

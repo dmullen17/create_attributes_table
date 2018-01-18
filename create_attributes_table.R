@@ -1,6 +1,28 @@
-create_attributes_table <- function(number_attributes) {
+create_attributes_table <- function(data, definitions = NULL, missingValueCode = NULL,
+                                    missingValueCodeExplanation = NULL) {
+  if(!length((colnames(data)))) {
+    stop("column names be populated")
+  }
   
-  n <- number_attributes
+  col_names <- colnames(data)
+  n <- length(col_names)
+  
+  if (any(grepl(" ", col_names))) {
+    stop(paste0("column names cannot contain whitespace"))
+  }
+  if (!(is.null(definitions))) {
+    if (length(definitions) != n) {
+      stop(paste0("definitions has length = ", length(definitions), ", rather than ", n))
+    }
+  } else {
+    definitions = rep(NA, n)
+  }
+  if (!(is.null(missingValueCode))) {
+    stopifnot(is.character(missingValueCode))
+  }
+  if (!(is.null(missingValueCodeExplanation))) {
+    stopifnot(is.character(missingValueCodeExplanation))
+  }
   
   table <- data.frame(attributeName = rep("NA", n),
                       attributeDefinition = rep("NA", n),

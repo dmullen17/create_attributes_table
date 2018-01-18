@@ -1,3 +1,20 @@
+get_numberType <- function(values){
+  numberType=NA
+  if (is.numeric(values)){
+    if (any(values%%1!=0,na.rm = T)){numberType='real'}
+    else{
+      if (any(values<0,na.rm = T)){numberType='integer'}
+      else{
+        if (any(values==0,na.rm = T)){numberType='whole'}
+        else{
+          numberType='natural'
+        }
+      }
+    }
+  }
+  return(numberType)
+}
+
 create_attributes_table <- function(data, definitions = NULL, missingValueCode = NULL,
                                     missingValueCodeExplanation = NULL) {
   if(!length((colnames(data)))) {

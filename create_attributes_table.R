@@ -16,7 +16,7 @@ get_numberType <- function(values){
 }
 
 create_attributes_table <- function(data, definitions = NULL, missingValueCode = NULL,
-                                    missingValueCodeExplanation = NULL) {
+                                        missingValueCodeExplanation = NULL) {
   if(!length((colnames(data)))) {
     stop("column names be populated")
   }
@@ -95,15 +95,15 @@ create_attributes_table <- function(data, definitions = NULL, missingValueCode =
     } else if (table$domain[i] == "numericDomain") {
       table$unit[i] <- readline(prompt = paste0("Enter units of measurement for ", table$attributeName[i],
                                                 ": \n"))
-      table$numberType[i] <- readline(prompt = paste0("Enter number type: \n"))
+      table$numberType[i] <- get_numberType(data[,i])
     } else {
       table$unit[i] = NA
       table$numberType[i] = NA
     }
     
-    message("If any nonimal or ordinal variables are 'enumeratedDomain', these were incorrectly set to 'textDomain'. Please update these fields by hand.")
-    
   }
+  
+  message("If any nonimal or ordinal variables are 'enumeratedDomain', these were incorrectly set to 'textDomain'. Please update these fields in the returned data frame manually.")
   
   return(table)
   

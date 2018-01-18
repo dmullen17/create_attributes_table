@@ -24,25 +24,28 @@ create_attributes_table <- function(data, definitions = NULL, missingValueCode =
     stopifnot(is.character(missingValueCodeExplanation))
   }
   
-  table <- data.frame(attributeName = rep("NA", n),
-                      attributeDefinition = rep("NA", n),
+  table <- data.frame(attributeName = col_names,
+                      attributeDefinition = definitions,
                       measurementScale = rep("NA", n),
                       domain = rep("NA", n),
-                      formatString = rep(NA, n),
-                      definition = rep("NA", n),
-                      unit = rep(NA, n),
-                      numberType = rep(NA, n),
-                      missingValueCode = rep(NA, n),
-                      missingValueCodeExplanation = rep(NA, n),
+                      formatString = rep("NA", n),
+                      definition = definitions,
+                      unit = rep("NA", n),
+                      numberType = rep("NA", n),
+                      missingValueCode = rep("NA", n),
+                      missingValueCodeExplanation = rep("NA", n),
                       stringsAsFactors = F)
   
   for (i in seq_len(n)) {
     
-    table$attributeName[i] <- readline(prompt = paste0("Enter attribute name:\n"))
+    if (is.na(table$attributeDefinition[i])) {
+      table$attributeDefinition[i] <- readline(prompt = paste0("Enter attribute definition for ",
+                                                               table$attributeName[i],": \n"))
+      table$definition[i] <- table$attributeDefinition[i]
+    }
     
-    table$attributeDefinition[i] <- readline(prompt = paste0("Enter attribute definition:\n"))
-    
-    measurementScale1 <- readline(prompt = paste0("Enter measurement scale. Choose one of: \n dateTime - d \n interval - i \n nominal  - n \n ordinal  - o \n ratio    - r \n"))
+    measurementScale1 <- readline(prompt = paste0("Enter measurement scale for ", table$attributeName[i],
+                                                  ". Choose one of: \n dateTime: 'd' \n interval: 'i' \n nominal: 'n' \n ordinal: 'o' \n ratio: 'r' \n"))
     
     switch(measurementScale1,
            "d" = {
@@ -69,10 +72,12 @@ create_attributes_table <- function(data, definitions = NULL, missingValueCode =
       table$domain[i] = "dateTimeDomain"
     }
     
-    table$definition[i] <- table$attributeDefinition[i]
-    
-    if (table$domain[i] == "numericDomain") {
-      table$unit[i] <- readline(prompt = paste0("Enter units of measurement: \n"))
+    if (table$domain[i] == "dateTimeDomain") {
+      table$formatString[i] <- readline(prompt = paste0("Enter string format for ", table$attributeName[i],
+                                                        ": \nExample: 'MM/DD/YYYY'"))
+    } else if (table$domain[i] == "numericDomain") {
+      table$unit[i] <- readline(prompt = paste0("Enter units of measurement for ", table$attributeName[i],
+                                                ": \n"))
       table$numberType[i] <- readline(prompt = paste0("Enter number type: \n"))
     } else {
       table$unit[i] = NA

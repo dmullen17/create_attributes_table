@@ -1,7 +1,7 @@
 get_numberType <- function(values){
   numberType=NA
   if (is.numeric(values)){
-    if (any(values%%1!=0,na.rm = T)){numberType='real'}
+    if (any(round(values)!=values)){numberType='real'}
     else{
       if (any(values<0,na.rm = T)){numberType='integer'}
       else{
